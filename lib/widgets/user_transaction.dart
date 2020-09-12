@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
-class UserTransaction extends StatelessWidget {
+class UserTransaction extends StatefulWidget {
   final Function addtx;
-  final _textcontroller = TextEditingController();
-  final _amountcontroller = TextEditingController();
+
   UserTransaction(this.addtx);
+
+  @override
+  _UserTransactionState createState() => _UserTransactionState();
+}
+
+class _UserTransactionState extends State<UserTransaction> {
+  final _textcontroller = TextEditingController();
+
+  final _amountcontroller = TextEditingController();
+
   void submitData() {
     final entereddata = _textcontroller.text;
     final enteramount = double.parse(_amountcontroller.text);
@@ -12,17 +21,18 @@ class UserTransaction extends StatelessWidget {
     if (enteramount <= 0 || entereddata.isEmpty) {
       return;
     }
-    addtx(
+    widget.addtx(
       entereddata,
       enteramount,
     );
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 5,
-      shadowColor: Colors.purple,
+      shadowColor: Theme.of(context).primaryColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [

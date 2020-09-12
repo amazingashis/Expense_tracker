@@ -22,7 +22,8 @@ class TransactionList extends StatelessWidget {
                   child: Text(
                     '\$${transaction[index].amount.toStringAsPrecision(2)}',
                     style: TextStyle(
-                        color: Colors.purple, fontWeight: FontWeight.bold),
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 Column(
@@ -30,8 +31,7 @@ class TransactionList extends StatelessWidget {
                   children: [
                     Text(
                       transaction[index].title,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.title,
                     ),
                     Text(
                       DateFormat.yMMMd().format(transaction[index].date),

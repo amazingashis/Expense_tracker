@@ -1,5 +1,7 @@
+import './widgets/user_transaction.dart';
 import 'package:flutter/material.dart';
-import './widgets/new_tansaction.dart';
+import './widgets/transaction_list.dart';
+import './modules/transactions.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,12 +14,59 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Dem',
       home: MyHomePage(),
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        accentColor: Colors.grey,
+        fontFamily: 'Quicksand',
+        appBarTheme: AppBarTheme(
+          textTheme: ThemeData.light().textTheme.copyWith(
+                title: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                ),
+              ),
+        ),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final List<Transaction> _usertransaction = [
+    Transaction(id: 't1', title: 'Shoes', amount: 68.00, date: DateTime.now()),
+    Transaction(id: 't2', title: 'Food', amount: 60.00, date: DateTime.now()),
+  ];
+
+  void _addnewtransaction(String titles, double amount) {
+    final newTx = Transaction(
+        id: DateTime.now().toString(),
+        title: titles,
+        amount: amount,
+        date: DateTime.now());
+
+    setState(() {
+      _usertransaction.add(newTx);
+    });
+  }
+
+  void _adduserTransaction(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return GestureDetector(
+          child: UserTransaction(_addnewtransaction),
+          onTap: () {},
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +76,7 @@ class MyHomePage extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () => _adduserTransaction(context),
           )
         ],
       ),
@@ -39,19 +88,19 @@ class MyHomePage extends StatelessWidget {
             Container(
               width: double.infinity,
               child: Card(
-                color: Colors.green,
+                color: Theme.of(context).primaryColor,
                 child: Text('Chart'),
                 elevation: 5,
               ),
             ),
-            NewTransaction(),
+            TransactionList(_usertransaction),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () => _adduserTransaction(context),
       ),
     );
   }
