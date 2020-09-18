@@ -22,7 +22,7 @@ class Chart extends StatelessWidget {
         'day': DateFormat.E().format(weekDays).substring(0, 1),
         'amount': totalSum
       };
-    });
+    }).reversed.toList();
   }
 
   double get maxSpending {
@@ -34,7 +34,7 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 192,
+      height: 195,
       child: Card(
         elevation: 6,
         margin: EdgeInsets.all(20),
