@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import './widgets/transaction_list.dart';
 import './modules/transactions.dart';
 import './widgets/chart.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
   runApp(MyApp());
 }
 
@@ -92,25 +98,54 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  bool _showStatus = false;
+
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: Text('Expense Tracker'),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _adduserTransaction(context),
+        )
+      ],
+    );
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Expense Tracker'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _adduserTransaction(context),
-          )
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(_recentTransaction),
-            TransactionList(_usertransaction, _deleteTransaction),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Show Chart"),
+                Switch(
+                    value: _showStatus,
+                    onChanged: (val) {
+                      setState(() {
+                        _showStatus = val;
+                      });
+                    }),
+              ],
+            ),
+            _showStatus
+                ? Container(
+                    height: (MediaQuery.of(context).size.height -
+                            appBar.preferredSize.height -
+                            MediaQuery.of(context).padding.top) *
+                        0.6,
+                    child: Chart(_recentTransaction),
+                  )
+                : Container(
+                    height: (MediaQuery.of(context).size.height -
+                            appBar.preferredSize.height -
+                            MediaQuery.of(context).padding.top) *
+                        0.7,
+                    child:
+                        TransactionList(_usertransaction, _deleteTransaction)),
           ],
         ),
       ),
